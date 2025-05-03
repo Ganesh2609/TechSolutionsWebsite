@@ -1,4 +1,4 @@
-const API_URL = 'http://localhost:5000/api';
+const API_URL = '/api';
 
 // Generate a unique session ID for this chat session
 const SESSION_ID = generateSessionId();
