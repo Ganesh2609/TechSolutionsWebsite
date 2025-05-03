@@ -1,9 +1,3 @@
-/**
- * TechSolutions AI Chatbot Integration
- * This file contains the code to integrate with the Gemini AI chatbot backend.
- */
-
-// Backend API URL - change this to your actual backend URL when deployed
 const API_URL = 'http://localhost:5000/api';
 
 // Generate a unique session ID for this chat session
