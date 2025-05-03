@@ -157,7 +157,9 @@ if __name__ == '__main__':
     if not GOOGLE_API_KEY:
         print("WARNING: GOOGLE_API_KEY environment variable not set!")
         print("The chatbot will not function without a valid Gemini API key.")
-        print("Please set this in your .env file.")
+        print("Please set this in your .env file or Vercel environment variables.")
     
-    # Start the app
-    app.run(debug=True, host='0.0.0.0', port=5000)
+    # For local development
+    if os.environ.get("VERCEL_ENV") is None:
+        app.run(debug=True, host='0.0.0.0', port=5000)
+    # On Vercel, the application is run automatically
