@@ -9,14 +9,14 @@ document.addEventListener('DOMContentLoaded', function() {
     // Initialize form validation
     initFormValidation();
     
-    // Initialize Google Sheets form submission
-    initGoogleSheetsSubmission();
+    // Initialize form submission handling (simplified - no Google Sheets)
+    initFormSubmission();
     
     // Check login status
     checkLoginStatus();
 });
 
-// Backend API URL - change this to your actual backend URL when deployed
+// Backend API URL - only needed for chatbot
 const API_URL = 'http://localhost:5000/api';
 
 // Generate a session ID for the chat
@@ -187,8 +187,8 @@ function initFormValidation() {
     });
 }
 
-// Google Sheets form submission
-function initGoogleSheetsSubmission() {
+// Simplified form submission (no Google Sheets)
+function initFormSubmission() {
     const forms = document.querySelectorAll('.google-sheets-form');
     
     Array.from(forms).forEach(form => {
@@ -200,12 +200,6 @@ function initGoogleSheetsSubmission() {
                 return;
             }
             
-            // Prepare form data
-            const formData = new FormData(form);
-            
-            // Add timestamp
-            formData.append('timestamp', new Date().toISOString());
-            
             try {
                 // Show loading state
                 const submitBtn = form.querySelector('button[type="submit"]');
@@ -213,57 +207,39 @@ function initGoogleSheetsSubmission() {
                 submitBtn.disabled = true;
                 submitBtn.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Submitting...';
                 
-                // Submit form to backend
-                const response = await fetch(`${API_URL}/submit-form`, {
-                    method: 'POST',
-                    body: formData
-                });
-                
-                const result = await response.json();
+                // Simulate API delay
+                await new Promise(resolve => setTimeout(resolve, 1000));
                 
                 // Reset submit button
                 submitBtn.disabled = false;
                 submitBtn.innerHTML = originalBtnText;
                 
-                if (result.success) {
-                    // Show success message
-                    const successAlert = document.createElement('div');
-                    successAlert.classList.add('alert', 'alert-success', 'mt-3');
-                    successAlert.textContent = 'Form submitted successfully!';
-                    
-                    // Reset the form
-                    form.reset();
-                    form.classList.remove('was-validated');
-                    
-                    // Append success message
-                    form.appendChild(successAlert);
-                    
-                    // Remove success message after 5 seconds
-                    setTimeout(() => {
-                        successAlert.remove();
-                    }, 5000);
-                    
-                    // Close modal if the form is in a modal
-                    const modal = form.closest('.modal');
-                    if (modal) {
-                        const modalInstance = bootstrap.Modal.getInstance(modal);
-                        if (modalInstance) {
-                            modalInstance.hide();
-                        }
+                // Show success message
+                const successAlert = document.createElement('div');
+                successAlert.classList.add('alert', 'alert-success', 'mt-3');
+                successAlert.textContent = 'Form submitted successfully!';
+                
+                // Reset the form
+                form.reset();
+                form.classList.remove('was-validated');
+                
+                // Append success message
+                form.appendChild(successAlert);
+                
+                // Remove success message after 5 seconds
+                setTimeout(() => {
+                    successAlert.remove();
+                }, 5000);
+                
+                // Close modal if the form is in a modal
+                const modal = form.closest('.modal');
+                if (modal) {
+                    const modalInstance = bootstrap.Modal.getInstance(modal);
+                    if (modalInstance) {
+                        modalInstance.hide();
                     }
-                } else {
-                    // Show error message
-                    const errorAlert = document.createElement('div');
-                    errorAlert.classList.add('alert', 'alert-danger', 'mt-3');
-                    errorAlert.textContent = result.error || 'There was an error submitting the form. Please try again later.';
-                    
-                    form.appendChild(errorAlert);
-                    
-                    // Remove error message after 5 seconds
-                    setTimeout(() => {
-                        errorAlert.remove();
-                    }, 5000);
                 }
+                
             } catch (error) {
                 console.error('Error:', error);
                 
@@ -283,68 +259,37 @@ function initGoogleSheetsSubmission() {
     });
 }
 
-// Authentication Functions
-async function login(email, password) {
-    try {
-        const response = await fetch(`${API_URL}/login`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ email, password }),
-        });
+// Authentication Functions - Simplified with hardcoded credentials
+function login(email, password) {
+    // Check against hardcoded credentials
+    if (email === 'ganesh@gmail.com' && password === 'sample1234') {
+        // Store login state in sessionStorage
+        sessionStorage.setItem('loggedIn', 'true');
+        sessionStorage.setItem('userEmail', email);
         
-        const result = await response.json();
-        
-        if (result.success) {
-            // Store login state in sessionStorage
-            sessionStorage.setItem('loggedIn', 'true');
-            sessionStorage.setItem('userEmail', email);
-            
-            // Redirect to home page
-            window.location.href = 'index.html';
-            return true;
-        } else {
-            return false;
-        }
-    } catch (error) {
-        console.error('Login error:', error);
-        return false;
+        // Redirect to home page
+        window.location.href = 'index.html';
+        return true;
     }
+    return false;
 }
 
-async function register(name, email, password, confirmPassword) {
+function register(name, email, password, confirmPassword) {
     // Validate inputs
     if (!name || !email || !password || password !== confirmPassword) {
         return false;
     }
     
-    try {
-        const response = await fetch(`${API_URL}/register`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ name, email, password }),
-        });
-        
-        const result = await response.json();
-        
-        if (result.success) {
-            // Store registration in sessionStorage temporarily
-            sessionStorage.setItem('registeredName', name);
-            sessionStorage.setItem('registeredEmail', email);
-            
-            // Redirect to login page
-            window.location.href = 'login.html?registered=true';
-            return true;
-        } else {
-            return false;
-        }
-    } catch (error) {
-        console.error('Registration error:', error);
-        return false;
-    }
+    // In a real app, this would store the user in a database
+    // For now, just simulate success
+    
+    // Store registration in sessionStorage temporarily
+    sessionStorage.setItem('registeredName', name);
+    sessionStorage.setItem('registeredEmail', email);
+    
+    // Redirect to login page
+    window.location.href = 'login.html?registered=true';
+    return true;
 }
 
 function checkLoginStatus() {
@@ -439,8 +384,11 @@ document.addEventListener('DOMContentLoaded', function() {
             submitBtn.disabled = true;
             submitBtn.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Signing in...';
             
+            // Simulate delay
+            await new Promise(resolve => setTimeout(resolve, 800));
+            
             // Call the login function
-            const success = await login(email, password);
+            const success = login(email, password);
             
             // Reset submit button
             submitBtn.disabled = false;
@@ -486,8 +434,11 @@ document.addEventListener('DOMContentLoaded', function() {
             submitBtn.disabled = true;
             submitBtn.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Signing up...';
             
+            // Simulate API delay
+            await new Promise(resolve => setTimeout(resolve, 1000));
+            
             // Call the register function
-            const success = await register(name, email, password, confirmPass);
+            const success = register(name, email, password, confirmPass);
             
             // Reset submit button
             submitBtn.disabled = false;
