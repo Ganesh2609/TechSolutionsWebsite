@@ -134,21 +134,6 @@ TechSolutionsWebsite/
 └── README.md           # Project documentation
 ```
 
-## 🔄 Deployment
-
-### GitHub Pages
-
-This repository is configured with GitHub Actions for automatic deployment to GitHub Pages. Any changes pushed to the `main` branch will trigger the workflow defined in `.github/workflows/static.yml`.
-
-### Vercel
-
-You can also deploy this project to Vercel by:
-
-1. Forking this repository
-2. Setting up a new Vercel project linked to your fork
-3. Adding your `GOOGLE_API_KEY` as an environment variable in the Vercel project settings
-4. Deploying the project
-
 ## 🎨 Customization
 
 ### Changing the theme
