@@ -1,5 +1,7 @@
 # TechSolutions Website
 
+🌐 **Live Demo**: [https://ganesh2609.github.io/TechSolutionsWebsite/](https://ganesh2609.github.io/TechSolutionsWebsite/)
+
 A modern, responsive website for TechSolutions - a fictional tech company offering various IT services and solutions. Built with HTML, CSS, JavaScript for the frontend and Flask with Gemini AI integration for the backend chat functionality.
 
 ![TechSolutions Website Screenshot](images/techsolutions-screenshot.png)
